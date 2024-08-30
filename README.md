@@ -3,7 +3,7 @@
 
 ## Commit Rules
 
-커밋 메시지는 아래의 규칙에 따라 작성합니다:
+커밋 메시지는 아래의 규칙에 따라 작성합니다.
 
 - **feat** : 새로운 기능 추가
 - **fix** : 버그 수정
@@ -19,3 +19,18 @@
 - **rename** : 파일 혹은 폴더명을 수정만 한 경우
 - **remove** : 파일을 삭제만 한 경우
 - **Update README.md** : README 파일 수정은 해당 메시지로 통일
+
+## Branch
+
+형상 관리를 위해 브랜치 관리를 다음과 같이 진행합니다. (Github Flow 기반)
+
+### main 브랜치
+
+- main 브랜치의 모든 커밋은 언제 배포하든 문제가 없어야 하고, 언제든 새로운 브랜치를 만들어도 문제가 없어야 합니다.
+
+### develop (topic) 브랜치
+
+- 새로운 기능을 개발할 때에는 develop(topic) 브랜치를 main 브랜치로부터 생성합니다.
+- 버그 수정도 develop 브랜치에서 진행합니다.
+- develop 브랜치의 이름은 **기능을 설명하는 명확한 이름**으로 명명해야 합니다. 예: `user-content-cache-key`, `submodules-init-task`, `redis2-transition` 등.
+- 해당 브랜치의 커밋은 기능이 완성되지 않았더라도 꾸준히 **Push**합니다.
