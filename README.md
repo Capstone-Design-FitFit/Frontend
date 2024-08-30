@@ -18,3 +18,4 @@
 - **chore** : 빌드 업무 수정, 패키지 매니저 수정 (gitignore 수정 등)
 - **rename** : 파일 혹은 폴더명을 수정만 한 경우
 - **remove** : 파일을 삭제만 한 경우
+- **Update README.md** : README 파일 수정은 해당 메시지로 통일
