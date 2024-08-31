@@ -8,8 +8,11 @@ const WebcamCapture = () => {
     const webcamRef = useRef(null);
     const canvasRef = useRef(null);
     const [detector, setDetector] = useState(null);
-    const [startCamera, serStartCamera] = useState(false);
+    const [startCamera, setStartCamera] = useState(false);
     const [captured, setCaptured] = useState(false);
+    const [clothImage, setClothImage] = useState(null);
+    const clothImageRef = useRef(clothImage);
+
     const targetIndices = ['0', '2', '5', '7', '8', '11', '12', '13', '14', '15', '16', '23', '24', '25', '26'];
     let cosineScore = 0;
 
@@ -82,7 +85,6 @@ const WebcamCapture = () => {
                     const targetPoseVector = vectorizeAndNormalize(targetPose);
                     cosineScore = 1 - cosineDistanceMatching(userPoseVector,targetPoseVector);
                     drawCanvas(pose, video, video.videoWidth, video.videoHeight, canvasRef);
-
                     // 캡쳐 조건 추가
                     if (cosineScore >= 0.9){
                         if (!captured){
@@ -125,26 +127,38 @@ const WebcamCapture = () => {
         }
     };
 
+    useEffect(() => {
+        clothImageRef.current = clothImage;  // clothImage 상태가 변경될 때마다 ref 업데이트
+    }, [clothImage]);
+
     //TODO userID 구현
     const userID = 'jinsoo9123'
 
     // 이미지 캡처 및 FastAPI 전송 함수 추가
     const captureAndSendImage = async () => {
+        if (!clothImageRef.current) {
+            alert('Cloth image is not set');
+            setCaptured(false);
+            return;
+        }
+        
         const canvas = canvasRef.current;
-        const image = canvas.toDataURL('image/png');  // 이미지 데이터 URL 생성
-
+        const vtonImage = canvas.toDataURL('image/png');  // 이미지 데이터 URL 생성
+    
         // 이미지 전송을 위해 Data URL을 Blob으로 변환
-        const blob = await (await fetch(image)).blob();
+        const blob = await (await fetch(vtonImage)).blob();  // Data URL을 Blob으로 변환
+    
         const formData = new FormData();
-        formData.append('file', blob, 'pose_capture.png');  // 서버에 보낼 파일 설정
-        formData.append('userID' , userID)
+        formData.append('garm_img', clothImageRef.current, 'garment_image.png');  // 파일 입력으로 받은 garm_img
+        formData.append('vton_img', blob, 'pose_capture.png');  // 서버에 보낼 파일 설정 (Blob 형태)
+    
         // FastAPI 서버로 이미지 전송
         try {
-            const response = await fetch('http://localhost:8000/api/send_capture_image', {  // 서버의 URL로 변경
+            const response = await fetch('http://localhost:8000/api/tryon', {  // 서버의 URL로 변경
                 method: 'POST',
                 body: formData,
             });
-
+    
             if (response.ok) {
                 alert('Image successfully sent to the server!');
             } else {
@@ -156,11 +170,16 @@ const WebcamCapture = () => {
     };
 
     function handleStartCamera(){
-        serStartCamera(true);
+        setStartCamera(true);
     }
+
+    const handleClothImageChange = (e) => {
+        setClothImage(e.target.files[0]);
+    };
 
     return (
         <div>
+            <input type="file" accept="image/*" onChange={handleClothImageChange} />
             <video
                 ref={webcamRef}
                 style={{ display: 'none' }}
