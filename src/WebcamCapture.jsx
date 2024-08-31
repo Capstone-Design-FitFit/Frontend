@@ -146,6 +146,7 @@ const WebcamCapture = () => {
         const vtonImage = canvas.toDataURL('image/png');  // 이미지 데이터 URL 생성
     
         // 이미지 전송을 위해 Data URL을 Blob으로 변환
+        // 추후 변수명 바꾸는게 좋을듯
         const blob = await (await fetch(vtonImage)).blob();  // Data URL을 Blob으로 변환
     
         const formData = new FormData();
