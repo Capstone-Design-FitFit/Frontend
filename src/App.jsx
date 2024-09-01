@@ -33,8 +33,8 @@ function App() {
       <br></br>
       <h1>사진 모션 캡쳐!</h1>
       <WebcamCapture></WebcamCapture>
-      <h1>모바일용</h1>
-      <CameraCapture></CameraCapture>
+      {/* <h1>모바일용</h1>
+      <CameraCapture></CameraCapture> */}
     </>
   )
 }
