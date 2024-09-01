@@ -11,6 +11,7 @@ const WebcamCapture = () => {
     const [startCamera, setStartCamera] = useState(false);
     const [captured, setCaptured] = useState(false);
     const [clothImage, setClothImage] = useState(null);
+    const [resultImage, setResultImage] = useState(null);
     const clothImageRef = useRef(clothImage);
 
     const targetIndices = ['0', '2', '5', '7', '8', '11', '12', '13', '14', '15', '16', '23', '24', '25', '26'];
@@ -159,7 +160,10 @@ const WebcamCapture = () => {
                 method: 'POST',
                 body: formData,
             });
-    
+            
+            const data = await response.json();
+            setResultImage(`data:image/jpeg;base64,${data.result.encoded_image}`); // Base64 데이터를 이미지로 설정
+
             if (response.ok) {
                 alert('Image successfully sent to the server!');
             } else {
@@ -191,6 +195,12 @@ const WebcamCapture = () => {
                 height="480"
             />
             <canvas ref={canvasRef} style={{ width: '768px', height: '1024px' }} />
+            {resultImage && (
+                <div>
+                <h2>Result Image</h2>
+                <img src={resultImage} alt="Virtual Try-On Result" />
+                </div>
+            )}
         </div>
     );
 };
