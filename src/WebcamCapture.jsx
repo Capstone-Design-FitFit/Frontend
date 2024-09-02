@@ -143,6 +143,7 @@ const WebcamCapture = () => {
             return;
         }
         
+        alert('Start Tryon!')
         const canvas = canvasRef.current;
         const vtonImage = canvas.toDataURL('image/png');  // 이미지 데이터 URL 생성
     
